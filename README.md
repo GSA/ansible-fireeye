@@ -25,9 +25,9 @@ Example Playbook
 ----------------
 
 ```yaml
-    - hosts: servers
-      roles:
-         - ansible-fireeye
+- hosts: servers
+  roles:
+     - ansible-fireeye
 ```
 
 Public domain
