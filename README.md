@@ -1,46 +1,40 @@
-ansible-fireeye
+fireeye [![circleci](https://circleci.com/gh/GSA/ansible-fireeye.svg?style=svg)](https://circleci.com/gh/GSA/ansible-fireeye)
 =========
 
-Endpoint Security enables detection and response using knowledge learned on the front line of incident response and managing our customers defense. This ansible role installs and configures the agent required to communicate with client machines.
+This ansible role installs and configures the fireeye agent required to communicate with client machines.
 
 Requirements
 ------------
 
-```bash
-redhat_fireeye_agent_filename: #redhat installer msi
-windows_fireeye_agent_filename: #windows installer msi
-```
+Required Packages
+- fireeye.rpm - redhat installer package
+- fireeye.msi - windows installer package
 
 Role Variables
 --------------
 
-```bash
-None
-```
+- redhat_fireeye_agent_filename: #redhat installer msi
+- windows_fireeye_agent_filename: #windows installer msi
 
 Dependencies
 ------------
-Acquire Installers
-```bash
-fireeye.rpm - redhat installer package
-fireeye.msi - windows installer package
-```
+
+None
 
 Example Playbook
 ----------------
 
-```bash
+```yaml
     - hosts: servers
       roles:
          - ansible-fireeye
 ```
 
-License
--------
+Public domain
+-------------
 
-MIT
+This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
 
-Author Information
-------------------
-
-Lance White - GSA/GEO
+> This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+>
+> All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
