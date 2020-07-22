@@ -1,2 +1,19 @@
 ---
-# tasks file for template
+- name: install fireeye agent (windows)
+  win_package:
+    chdir: '{{ win_agent_path }}'
+    path: '{{ win_agent_path }}\\{{ item.name }}'
+    state: present
+    log_path: '{{ win_agent_logs }}\\{{ item.name }}_log.txt'
+    validate_certs: no
+  with_items:
+    - { name: '{{ windows_nessus_agent_filename }}' }
+  when: ansible_os_family = 'Windows'
+
+- name: install fireeye agent (redhat)
+  yum:
+    name: '{{ lin_agent_path }}/{{ item.name }}'
+    state: present
+  with_items:
+    - { name: '{{ redhat_nessus_agent_filename }}'}
+  when: ansible_os_family = 'RedHat'
