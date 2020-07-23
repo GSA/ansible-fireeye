@@ -1,4 +1,16 @@
 ---
+- name: create win_agent_path directory
+  win_file:
+    path: '{{ win_agent_path }}'
+    state: directory
+  when: ansible_os_family = 'Windows'
+
+- name: create win_agent_logs directory
+  win_file:
+    path: '{{ win_agent_logs }}'
+    state: directory
+  when: ansible_os_family = 'Windows'
+
 - name: install fireeye agent (windows)
   win_package:
     chdir: '{{ win_agent_path }}'
@@ -9,6 +21,13 @@
   with_items:
     - { name: '{{ windows_nessus_agent_filename }}' }
   when: ansible_os_family = 'Windows'
+
+- name: create lin_agent_path directory
+  file:
+    path: '{{ lin_agent_path }}'
+    state: directory
+    mode: '0755'
+  when: ansible_os_family = 'RedHat'
 
 - name: install fireeye agent (redhat)
   yum:

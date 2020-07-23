@@ -6,15 +6,17 @@ This ansible role installs and configures the fireeye agent required to communic
 Requirements
 ------------
 
-Required Packages
+Required Packages (this role requires access to the following packages/installers)
 - fireeye.rpm - redhat installer package
 - fireeye.msi - windows installer package
 
 Role Variables
 --------------
 
-- redhat_fireeye_agent_filename: #redhat installer msi
-- windows_fireeye_agent_filename: #windows installer msi
+| Variable | Default | Purpose |
+| ------ | ------ | ------ |
+| redhat_fireeye_agent_filename | "" | redhat installer msi |
+| windows_fireeye_agent_filename | "" | windows installer msi |
 
 Dependencies
 ------------
