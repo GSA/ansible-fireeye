@@ -25,7 +25,7 @@
     dest: '{{ win_agent_path }}{{ item.name }}'
   with_items:
     - { name: '{{ windows_fireeye_agent_filename }}'}
-  when: installer.stat.exists == False
+  when: installer.stat.exists
 
 - name: move agent_config.json to {{ win_agent_path }} directory
   win_copy:
@@ -33,7 +33,7 @@
     dest: '{{ win_agent_path }}{{ item.name }}'
   with_items:
     - { name: '{{ windows_fireeye_agent_config }}'}
-  when: agent_config.stat.exists == False
+  when: agent_config.stat.exists
 
 - name: install fireeye agent (windows)
   win_package:

@@ -17,7 +17,7 @@
     mode: '0755'
   with_items:
     - { name: '{{ redhat_fireeye_agent_filename }}'}
-  when: installer.stat.exists == False
+  when: installer.stat.exists
 
 - name: install fireeye agent (redhat)
   yum:
