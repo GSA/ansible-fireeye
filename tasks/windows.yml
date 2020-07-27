@@ -1,0 +1,46 @@
+---
+- name: create {{ win_agent_path }} directory
+  win_file:
+    path: '{{ win_agent_path }}'
+    state: directory
+
+- name: create {{ win_agent_logs }} directory
+  win_file:
+    path: '{{ win_agent_logs }}'
+    state: directory
+
+- name: checking for installer
+  win_stat:
+    path: '{{ win_agent_path }}{{ windows_fireeye_agent_filename }}'
+  register: installer
+
+- name: checking for agent_config
+  win_stat:
+    path: '{{ win_agent_path }}{{ windows_fireeye_agent_config }}'
+  register: agent_config
+
+- name: move installer to {{ win_agent_path }} directory
+  win_copy:
+    src: '{{ lin_agent_path }}/{{ item.name }}'
+    dest: '{{ win_agent_path }}{{ item.name }}'
+  with_items:
+    - { name: '{{ windows_fireeye_agent_filename }}'}
+  when: installer.stat.exists
+
+- name: move agent_config.json to {{ win_agent_path }} directory
+  win_copy:
+    src: '{{ lin_agent_path }}/{{ item.name }}'
+    dest: '{{ win_agent_path }}{{ item.name }}'
+  with_items:
+    - { name: '{{ windows_fireeye_agent_config }}'}
+  when: agent_config.stat.exists
+
+- name: install fireeye agent (windows)
+  win_package:
+    chdir: '{{ win_agent_path }}'
+    path: '{{ win_agent_path }}{{ item.name }}'
+    state: present
+    log_path: '{{ win_agent_logs }}\\{{ item.name }}_log.txt'
+    validate_certs: no
+  with_items:
+    - { name: '{{ windows_fireeye_agent_filename }}' }
