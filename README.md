@@ -15,7 +15,7 @@ Role Variables
 
 | Variable | Default | Purpose |
 | ------ | ------ | ------ |
-| redhat_fireeye_agent_filename | "" | redhat installer msi |
+| redhat_fireeye_agent_filename | "" | redhat installer rpm |
 | windows_fireeye_agent_filename | "" | windows installer msi |
 
 Dependencies
