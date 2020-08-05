@@ -13,7 +13,7 @@
 
 - name: copy agent_config.json to {{ windows_agent_path }} directory
   win_get_url:
-    url: '{{ fireye_agent_config_url }}'
+    url: '{{ fireeye_agent_config_url }}'
     dest: '{{ windows_agent_path }}\\agent_config.json'
 
 - name: install fireeye agent (windows)
@@ -21,6 +21,7 @@
     path: '{{ windows_fireeye_agent_url }}'
     log_path: '{{ windows_agent_log }}\\fireeye_log.txt'
     product_id: '{{ windows_fireeye_product_id }}'
+    chdir: '{{ windows_agent_path }}'
     validate_certs: no
     state: present
     arguments: /qn
