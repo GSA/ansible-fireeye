@@ -15,12 +15,12 @@
   win_get_url:
     url: '{{ fireye_agent_config_url }}'
     dest: '{{ windows_agent_path }}\\agent_config.json'
-    mode: '0755'
 
 - name: install fireeye agent (windows)
   win_package:
     path: '{{ windows_fireeye_agent_url }}'
     log_path: '{{ windows_agent_log }}\\fireeye_log.txt'
+    product_id: '{{ windows_fireeye_product_id }}'
     validate_certs: no
     state: present
     arguments: /qn

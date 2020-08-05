@@ -8,7 +8,7 @@
 
 - name: copy agent_config to {{ redhat_agent_path }} directory
   get_url:
-    url: '{{ bigfix_actionsite_url }}'
+    url: '{{ fireye_agent_config_url }}'
     dest: '{{ redhat_agent_path }}/agent_config.json'
     mode: '0755'
 

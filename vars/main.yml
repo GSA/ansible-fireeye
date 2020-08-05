@@ -1,5 +1,2 @@
 ---
 # vars file for ansible-fireeye
-redhat_fireeye_agent_url: "" # default redhat agent url
-windows_fireeye_agent_url: "" # default windows agent url
-fireye_agent_config_url: "" # default agent_config.json url

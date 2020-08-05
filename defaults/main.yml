@@ -1,5 +1,9 @@
 ---
 # defaults file for ansible-fireeye
 redhat_agent_path: "" # default redhat install directory
-windows_agent_path: "C:\\Program Files(x86)\\FireEye" # default windows install directory
+windows_agent_path: "C:\\Program Files (x86)\\FireEye" # default windows install directory
 windows_agent_log: "C:\\Temp\\Logs" # default agent windows log directory
+redhat_fireeye_agent_url: "" # default redhat agent url
+windows_fireeye_agent_url: "" # default windows agent url
+fireye_agent_config_url: "" # default agent_config.json url
+windows_fireeye_product_id: "" # default product_id
