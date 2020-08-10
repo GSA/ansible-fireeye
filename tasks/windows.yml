@@ -30,6 +30,7 @@
   win_get_url:
     url: '{{ fireeye_agent_config_url }}'
     dest: '{{ windows_fireeye_agent_path }}\\agent_config.json'
+    validate_certs: no
   when: path.stat.islnk is not defined
 
 - name: install fireeye agent (windows)

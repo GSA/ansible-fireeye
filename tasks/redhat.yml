@@ -24,6 +24,7 @@
   get_url:
     url: '{{ fireeye_agent_config_url }}'
     dest: '{{ redhat_fireeye_agent_path }}/agent_config.json'
+    validate_certs: no
     mode: '0755'
   when: path.stat.islnk is not defined
 
@@ -31,6 +32,7 @@
   yum:
     name: '{{ redhat_fireeye_agent_url }}'
     state: present
+    validate_certs: no
   when: path.stat.islnk is not defined
 
 - name: verify fireeye started
