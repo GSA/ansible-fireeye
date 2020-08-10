@@ -6,17 +6,28 @@ This ansible role installs and configures the fireeye agent required to communic
 Requirements
 ------------
 
-Required Packages (this role requires access to the following packages/installers)
+Required Packages (this role requires access to the following packages/installers via an external repository)
 - fireeye.rpm - redhat installer package
 - fireeye.msi - windows installer package
 
 Role Variables
 --------------
 
+### Windows
+
 | Variable | Default | Purpose |
 | ------ | ------ | ------ |
-| redhat_fireeye_agent_filename | "" | redhat installer rpm |
-| windows_fireeye_agent_filename | "" | windows installer msi |
+| windows_fireeye_agent_path | "C:\\Program Files (x86)\\FireEye\\xagt" | default windows install directory |
+| windows_fireeye_agent_url | "" | windows installer msi |
+| windows_fireeye_product_id | "" | windows product_id |
+| windows_agent_log | "C:\Temp\Logs" | default agent windows log directory |
+
+### Redhat
+
+| Variable | Default | Purpose |
+| ------ | ------ | ------ |
+| redhat_fireeye_agent_path | "/opt/fireeye" | default redhat install directory |
+| redhat_fireeye_agent_url | "" | redhat installer rpm |
 
 Dependencies
 ------------

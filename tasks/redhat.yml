@@ -1,18 +1,39 @@
 ---
+- name: checking for agent install
+  stat:
+    path: '{{ redhat_fireeye_agent_path }}'
+  register: path
+
+- debug:
+    msg: "fireeye agent not found"
+  when: path.stat.islnk is not defined
+
+- debug:
+    msg: "fireeye agent found skipping install"
+  when: path.stat.islnk is defined
+
 - name: create {{ redhat_fireeye_agent_path }} directory
   file:
     path: '{{ redhat_fireeye_agent_path }}'
     recurse: yes
     state: directory
     mode: '0755'
+  when: path.stat.islnk is not defined
 
 - name: copy agent_config to {{ redhat_fireeye_agent_path }} directory
   get_url:
     url: '{{ fireeye_agent_config_url }}'
     dest: '{{ redhat_fireeye_agent_path }}/agent_config.json'
     mode: '0755'
+  when: path.stat.islnk is not defined
 
 - name: install fireeye agent (redhat)
   yum:
     name: '{{ redhat_fireeye_agent_url }}'
     state: present
+  when: path.stat.islnk is not defined
+
+- name: verify fireeye started
+  service:
+    name: xagt
+    state: started
