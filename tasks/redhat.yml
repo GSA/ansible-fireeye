@@ -1,24 +1,38 @@
 ---
-- name: create {{ lin_agent_path }} directory
-  file:
-    path: '{{ lin_agent_path }}'
-    state: directory
-    mode: '0755'
-
-- name: checking for installer
+- name: checking for agent install
   stat:
-    path: '{{ lin_agent_path }}{{ redhat_fireye_agent_filename }}'
-  register: installer
+    path: '{{ redhat_fireeye_agent_path }}/bin/xagt'
+  register: agent
+
+- debug:
+    msg: "fireeye agent not found (installing)"
+  when: not agent.stat.exists
+
+- debug:
+    msg: "fireeye agent found (skipping install)"
+  when: agent.stat.exists
 
 - name: install fireeye agent (redhat)
   yum:
-    name: '{{ lin_agent_path }}/{{ item.name }}'
+    name: '{{ redhat_fireeye_agent_url }}'
     state: present
     validate_certs: no
     disable_plugin: "yum-rhn-plugin"
     disablerepo: "rhel-8-appstream-rhui-rpms,rhel-8-baseos-rhui-rpms,rhui-client-config-server-8"
-    timeout: 600
-  when: path.stat.islnk is not defined
+    download_dir: '{{ redhat_fireeye_agent_path }}'
+  when: not agent.stat.exists
+
+- name: copy agent_config.json to {{ redhat_fireeye_agent_path }} directory
+  get_url:
+    url: '{{ fireeye_agent_config_url }}'
+    dest: '{{ redhat_fireeye_agent_path }}/agent_config.json'
+    validate_certs: no
+    mode: '0755'
+  when: not agent.stat.exists
+
+- name: point {{ redhat_fireeye_agent_path }}/bin/xagt to {{ redhat_fireeye_agent_path }}/agent_config.json
+  command: '{{ redhat_fireeye_agent_path }}/bin/xagt -i {{ redhat_fireeye_agent_path }}/agent_config.json'
+  become: yes
 
 - name: verify fireeye started
   service:
