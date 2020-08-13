@@ -1,44 +1,44 @@
 ---
 - name: checking for agent install
-  win_stat:
-    path: '{{ windows_fireeye_full_agent_path }}'
-  register: path
+  win_service:
+    name: xagt
+  register: agent
 
 - debug:
-    msg: "fireeye agent not found"
-  when: path.stat.islnk is not defined
+    msg: "fireeye agent not found (installing)"
+  when: not agent.exists
 
 - debug:
-    msg: "fireye agent found skipping install"
-  when: path.stat.islnk is defined
+    msg: "fireeye agent found (skipping install)"
+  when: agent.exists
 
 - name: create {{ windows_agent_log }} directory
   win_file:
     path: '{{ windows_agent_log }}'
     recurse: yes
     state: directory
-  when: path.stat.islnk is not defined
+  when: not agent.exists
 
 - name: create {{ windows_fireeye_agent_path }} directory
   win_file:
     path: '{{ windows_fireeye_agent_path }}'
     recurse: yes
     state: directory
-  when: path.stat.islnk is not defined
+  when: not agent.exists
 
 - name: create {{ windows_fireeye_config_path }} directory
   win_file:
     path: '{{ windows_fireeye_config_path }}'
     recurse: yes
     state: directory
-  when: path.stat.islnk is not defined
+  when: not agent.exists
 
 - name: copy agent_config.json to {{ windows_fireeye_config_path }} directory
   win_get_url:
     url: '{{ fireeye_agent_config_url }}'
     dest: '{{ windows_fireeye_config_path }}\agent_config.json'
     timeout: 600
-  when: path.stat.islnk is not defined
+  when: not agent.exists
 
 - name: install fireeye agent (windows)
   win_package:
@@ -48,7 +48,7 @@
     chdir: '{{ windows_fireeye_agent_path }}'
     state: present
     arguments: /qn
-  when: path.stat.islnk is not defined
+  when: not agent.exists
 
 - name: verify fireeye started
   win_service:
