@@ -1,8 +1,17 @@
 ---
 # defaults file for ansible-fireeye
-win_agent_path: "C:\\Temp\\Agents\\" # default agent path directory windows
-lin_agent_path: "/opt/GSA/install_files" # default agent path directory redhat
-win_agent_logs: "C:\\Temp\\Agents\\Logs" # default agent log directory windows
-windows_fireeye_agent_config: "agent_config.json"
-windows_fireeye_agent_filename: "fireeye.msi"
-redhat_fireye_agent_filename: "fireeye.rpm"
+
+#universal
+fireye_agent_config_url: "" # default agent_config.json url
+
+#redhat
+redhat_fireeye_agent_path: "/opt/fireeye" # default redhat install directory
+redhat_fireeye_agent_url: "" # default redhat agent url
+
+#windows
+windows_fireeye_agent_path: "C:\\Program Files (x86)\\FireEye\\xagt" # default windows install directory
+windows_fireeye_full_agent_path: "C:\\Program Files (x86)\\FireEye\\xagt\\xagt.exe"
+windows_fireeye_agent_url: "" # default windows agent artifactory url
+windows_fireeye_product_id: "" # win_package using a url requires a product_id
+windows_agent_log: "C:\\Temp\\Logs" # default agent windows log directory
+windows_fireeye_config_path: "C:\\ProgramData\\FireEye"

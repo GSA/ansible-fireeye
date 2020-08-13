@@ -1,46 +1,57 @@
 ---
-- name: create {{ win_agent_path }} directory
-  win_file:
-    path: '{{ win_agent_path }}'
-    state: directory
-
-- name: create {{ win_agent_logs }} directory
-  win_file:
-    path: '{{ win_agent_logs }}'
-    state: directory
-
-- name: checking for installer
+- name: checking for agent install
   win_stat:
-    path: '{{ win_agent_path }}{{ windows_fireeye_agent_filename }}'
-  register: installer
+    path: '{{ windows_fireeye_full_agent_path }}'
+  register: path
 
-- name: checking for agent_config
-  win_stat:
-    path: '{{ win_agent_path }}{{ windows_fireeye_agent_config }}'
-  register: agent_config
+- debug:
+    msg: "fireeye agent not found"
+  when: path.stat.islnk is not defined
 
-- name: move installer to {{ win_agent_path }} directory
-  win_copy:
-    src: '{{ lin_agent_path }}/{{ item.name }}'
-    dest: '{{ win_agent_path }}{{ item.name }}'
-  with_items:
-    - { name: '{{ windows_fireeye_agent_filename }}'}
-  when: not installer.stat.exists
+- debug:
+    msg: "fireye agent found skipping install"
+  when: path.stat.islnk is defined
 
-- name: move agent_config.json to {{ win_agent_path }} directory
-  win_copy:
-    src: '{{ lin_agent_path }}/{{ item.name }}'
-    dest: '{{ win_agent_path }}{{ item.name }}'
-  with_items:
-    - { name: '{{ windows_fireeye_agent_config }}'}
-  when: not agent_config.stat.exists
+- name: create {{ windows_agent_log }} directory
+  win_file:
+    path: '{{ windows_agent_log }}'
+    recurse: yes
+    state: directory
+  when: path.stat.islnk is not defined
+
+- name: create {{ windows_fireeye_agent_path }} directory
+  win_file:
+    path: '{{ windows_fireeye_agent_path }}'
+    recurse: yes
+    state: directory
+  when: path.stat.islnk is not defined
+
+- name: create {{ windows_fireeye_config_path }} directory
+  win_file:
+    path: '{{ windows_fireeye_config_path }}'
+    recurse: yes
+    state: directory
+  when: path.stat.islnk is not defined
+
+- name: copy agent_config.json to {{ windows_fireeye_config_path }} directory
+  win_get_url:
+    url: '{{ fireeye_agent_config_url }}'
+    dest: '{{ windows_fireeye_config_path }}\agent_config.json'
+    timeout: 600
+  when: path.stat.islnk is not defined
 
 - name: install fireeye agent (windows)
   win_package:
-    chdir: '{{ win_agent_path }}'
-    path: '{{ win_agent_path }}{{ item.name }}'
+    path: '{{ windows_fireeye_agent_url }}'
+    log_path: '{{ windows_agent_log }}\fireeye_log.txt'
+    product_id: '{{ windows_fireeye_product_id }}'
+    chdir: '{{ windows_fireeye_agent_path }}'
     state: present
-    log_path: '{{ win_agent_logs }}\\{{ item.name }}_log.txt'
-    validate_certs: no
-  with_items:
-    - { name: '{{ windows_fireeye_agent_filename }}' }
+    arguments: /qn
+  when: path.stat.islnk is not defined
+
+- name: verify fireeye started
+  win_service:
+    name: xagt
+    state: started
+    start_mode: auto
