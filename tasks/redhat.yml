@@ -32,7 +32,9 @@
 
 - name: point {{ redhat_fireeye_agent_path }}/bin/xagt to {{ redhat_fireeye_agent_path }}/agent_config.json
   command: '{{ redhat_fireeye_agent_path }}/bin/xagt -i {{ redhat_fireeye_agent_path }}/agent_config.json'
+  register: fireeye
   become: yes
+  changed_when: fireeye.stdout == "Failed"
 
 - name: verify fireeye started
   service:
